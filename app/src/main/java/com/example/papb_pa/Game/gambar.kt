@@ -4,13 +4,13 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Base64
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.R
 import com.example.papb_pa.data.Pesan
@@ -22,6 +22,8 @@ import kotlinx.android.synthetic.main.fragment_gambar.view.*
 import kotlinx.android.synthetic.main.view_color_palette.view.*
 import kotlinx.android.synthetic.main.view_gambar.view.*
 import java.io.ByteArrayOutputStream
+import java.lang.reflect.Field
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +49,7 @@ class gambar : Fragment() {
             code = it.getString(ARG_PARAM2)
         }
     }
+
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
@@ -74,17 +77,20 @@ class gambar : Fragment() {
                 var numb : String = ""
                 var soal : String = ""
                 var timer : String = "0"
+                var playerNumb = snapshot.child("user").child(id.toString()).child("numb").value.toString()
                 numb = snapshot.child("numb").value.toString()
                 timer = snapshot.child("timer").value.toString()
-                if (numb != "null")
-                    soal = snapshot.child("soal").child((Integer.parseInt(numb)-1).toString()).value.toString()
+                if (numb != "null" && playerNumb !="null"){
+                    soal = snapshot.child("soal").child((Integer.parseInt(numb) - 1).toString()).value.toString()
+                    if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb){
+                        uploadGambar(convert(viewF.draw_view.getBitmap()))
+                    }
+                }
                 if (soal != "null")
                     viewF.soal_gambar.text = soal
                 if(timer != "null")
                     viewF.timer_gambar.progress = Integer.parseInt(timer)
-                if (onDraw && viewF.draw_view.height > 0){
-                    uploadGambar(convert(viewF.draw_view.getBitmap()))
-                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -110,14 +116,17 @@ class gambar : Fragment() {
                 pesan.clear()
                 for (userSnapshot in dataSnapshot.children) {
                     pesan.add(
-                            Pesan(
-                                    userSnapshot.child("id").value.toString(),
-                                    userSnapshot.child("jeneng").value.toString(),
-                                    userSnapshot.child("pesan").value.toString()
-                            )
+                        Pesan(
+                            userSnapshot.child("id").value.toString(),
+                            userSnapshot.child("jeneng").value.toString(),
+                            userSnapshot.child("pesan").value.toString()
+                        )
                     )
                 }
                 pesanAdapter.notifyDataSetChanged()
+                if (pesan.size>0){
+                    view.rv_pesan_gambar.scrollToPosition(pesan.size - 1)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(view.context, "Fail to Load Data", Toast.LENGTH_SHORT).show()
@@ -131,7 +140,7 @@ class gambar : Fragment() {
         }
     }
 
-    private fun setUpDrawTools(view : View) {
+    private fun setUpDrawTools(view: View) {
         view.circle_view_opacity.setCircleRadius(100f)
         view.image_draw_eraser.setOnClickListener {
             view.draw_view.toggleEraser()
@@ -197,7 +206,7 @@ class gambar : Fragment() {
         }
     }
 
-    private fun colorSelector(view : View) {
+    private fun colorSelector(view: View) {
         view.image_color_black.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_black, null)
             view.draw_view.setColor(color)
@@ -210,35 +219,35 @@ class gambar : Fragment() {
             view.draw_view.setColor(color)
             view.circle_view_opacity.setColor(color)
             view.circle_view_width.setColor(color)
-            scaleColorView(view,it.image_color_red)
+            scaleColorView(view, it.image_color_red)
         }
         view.image_color_yellow.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_yellow, null)
             view.draw_view.setColor(color)
             view.circle_view_opacity.setColor(color)
             view.circle_view_width.setColor(color)
-            scaleColorView(view,it.image_color_yellow)
+            scaleColorView(view, it.image_color_yellow)
         }
         view.image_color_green.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_green, null)
             view.draw_view.setColor(color)
             view.circle_view_opacity.setColor(color)
             view.circle_view_width.setColor(color)
-            scaleColorView(view,it.image_color_green)
+            scaleColorView(view, it.image_color_green)
         }
         view.image_color_blue.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_blue, null)
             view.draw_view.setColor(color)
             view.circle_view_opacity.setColor(color)
             view.circle_view_width.setColor(color)
-            scaleColorView(view,it.image_color_blue)
+            scaleColorView(view, it.image_color_blue)
         }
         view.image_color_pink.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_pink, null)
             view.draw_view.setColor(color)
             view.circle_view_opacity.setColor(color)
             view.circle_view_width.setColor(color)
-            scaleColorView(view,it.image_color_pink)
+            scaleColorView(view, it.image_color_pink)
         }
         view.image_color_brown.setOnClickListener {
             val color = ResourcesCompat.getColor(resources, R.color.color_brown, null)
@@ -249,7 +258,7 @@ class gambar : Fragment() {
         }
     }
 
-    private fun scaleColorView(view: View, viewSelect : View) {
+    private fun scaleColorView(view: View, viewSelect: View) {
         //reset scale of all views
         view.image_color_black.scaleX = 1f
         view.image_color_black.scaleY = 1f
@@ -277,7 +286,7 @@ class gambar : Fragment() {
         viewSelect.scaleY = 1.5f
     }
 
-    private fun setPaintWidth(view : View) {
+    private fun setPaintWidth(view: View) {
         view.seekBar_width.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 view.draw_view.setStrokeWidth(progress.toFloat())
@@ -290,7 +299,7 @@ class gambar : Fragment() {
         })
     }
 
-    private fun setPaintAlpha(view : View) {
+    private fun setPaintAlpha(view: View) {
         view.seekBar_opacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 view.draw_view.setAlpha(progress)

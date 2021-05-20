@@ -2,6 +2,7 @@ package com.example.papb_pa.GabungWongLiyo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.R
@@ -34,7 +35,11 @@ class GabungWongLiyo  : AppCompatActivity() {
                                         roomSnapshot.child("user").childrenCount.toInt()
                                 )
                         )
-                    }
+                    }else if (roomSnapshot.child("maen").value.toString() == " false")
+                        database.reference.child("room").child(roomSnapshot.key.toString()).removeValue()
+                }
+                if (room.size>0){
+                    load_room.visibility = View.GONE
                 }
                 roomAdapter.notifyDataSetChanged()
             }

@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_gambar.view.*
 import kotlinx.android.synthetic.main.fragment_jawab.view.*
+import java.lang.reflect.Field
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -54,8 +56,8 @@ class Jawab : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_jawab, container, false)
@@ -68,6 +70,14 @@ class Jawab : Fragment() {
         view.bt_send.setOnClickListener {
             onSend(view)
         }
+        view.et_pesan.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
+                //Perform Code
+                onSend(view)
+                return@OnKeyListener true
+            }
+            false
+        })
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -89,8 +99,9 @@ class Jawab : Fragment() {
         return view
     }
 
-    private fun onSend(view : View){
+    private fun onSend(view: View){
         var pesan = view.et_pesan.text.toString()
+        view.et_pesan.text.clear()
         var refPoin = database.reference.child("room")
             .child(code.toString()).child("user")
             .child(id.toString())
@@ -98,12 +109,12 @@ class Jawab : Fragment() {
         if (soal.contains(pesan.toLowerCase())){
             sendPesan("Jawabane $jeneng bener")
             refPoin.get().addOnSuccessListener {
-                refPoin.setValue(Integer.parseInt(it.value.toString())+10)
+                refPoin.setValue(Integer.parseInt(it.value.toString()) + 10)
             }
         }else{
             sendPesan("Jawabane $jeneng salah")
             refPoin.get().addOnSuccessListener {
-                refPoin.setValue(Integer.parseInt(it.value.toString())-3)
+                refPoin.setValue(Integer.parseInt(it.value.toString()) - 3)
             }
         }
     }
@@ -116,7 +127,7 @@ class Jawab : Fragment() {
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
     }
 
-    private fun sendPesan(pesan : String){
+    private fun sendPesan(pesan: String){
         val sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS")
         val now = Date()
         val strDate: String = sdfDate.format(now)
@@ -136,14 +147,17 @@ class Jawab : Fragment() {
                 pesan.clear()
                 for (userSnapshot in dataSnapshot.children) {
                     pesan.add(
-                            Pesan(
-                                    userSnapshot.child("id").value.toString(),
-                                    userSnapshot.child("jeneng").value.toString(),
-                                    userSnapshot.child("pesan").value.toString()
-                            )
+                        Pesan(
+                            userSnapshot.child("id").value.toString(),
+                            userSnapshot.child("jeneng").value.toString(),
+                            userSnapshot.child("pesan").value.toString()
+                        )
                     )
                 }
                 pesanAdapter.notifyDataSetChanged()
+                if (pesan.size>0){
+                    view.RV_pesan.smoothScrollToPosition(pesan.size - 1)
+                }
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(view.context, "Fail to Load Data", Toast.LENGTH_SHORT).show()
@@ -165,10 +179,10 @@ class Jawab : Fragment() {
                 user.clear()
                 for (userSnapshot in dataSnapshot.children) {
                     user.add(
-                            User(
-                                    userSnapshot.child("id").getValue().toString(),
-                                    userSnapshot.child("jeneng").getValue().toString()
-                            )
+                        User(
+                            userSnapshot.child("id").getValue().toString(),
+                            userSnapshot.child("jeneng").getValue().toString()
+                        )
                     )
                 }
                 heroAdapter.notifyDataSetChanged()

@@ -63,6 +63,7 @@ class RoomAdapter(private val room: List<getRoom>) : RecyclerView.Adapter<RoomAd
                                 .addOnCompleteListener {
                                     var intent = Intent(context, WaitingRoom::class.java)
                                     intent.putExtra("code", room[position].code.toString())
+                                    intent.putExtra("jeneng", input.text.toString())
                                     context.startActivity(intent)
                                 }
                         })

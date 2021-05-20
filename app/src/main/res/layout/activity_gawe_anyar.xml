@@ -63,16 +63,33 @@
                     android:textSize="24dp"
                     android:layout_gravity="center_horizontal"
                     android:paddingLeft="20dp" />
-                <Button
-                    android:id="@+id/bt_ga_maen"
+                <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button"
-                    android:layout_gravity="center_horizontal"
-                    android:text="MAEN"
-                    android:textColor="#4CAF50"
-                    android:textSize="20sp"
-                    android:textStyle="bold"/>
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:id="@+id/bt_ga_maen"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button"
+                        android:layout_gravity="center_horizontal"
+                        android:text="MAEN"
+                        android:textColor="#4CAF50"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:id="@+id/maen_anyar_load"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button"
+                        android:layout_gravity="center">
+                        <ProgressBar
+                            android:id="@+id/maen_bar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                    </FrameLayout>
+                </FrameLayout>
+
             </LinearLayout>
 
         </FrameLayout>

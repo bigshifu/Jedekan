@@ -1,31 +1,83 @@
 package com.example.papb_pa.Game
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.PersistableBundle
 import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.example.papb_pa.MainActivity
 import com.google.firebase.database.*
 import com.example.papb_pa.R
 import kotlinx.android.synthetic.main.activity_maen_game.*
 import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.view_gambar.*
+import java.text.SimpleDateFormat
+import java.time.Instant.now
+import java.util.*
 
 class Maen : AppCompatActivity() {
     private var time = 0
     private var code = ""
-    var bgThread = Thread()
+    private var jeneng = ""
+    private lateinit var dialog: AlertDialog
+    private var bgThread = Thread()
+    private lateinit var fragGambar : Fragment
+    private lateinit var fragJawab: Fragment
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maen_game)
         code = intent.getStringExtra("code").toString()
+        jeneng = intent.getStringExtra("jeneng").toString()
         val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         var ref = database.reference
             .child("room")
             .child(code)
+        fragGambar = gambar.newInstance(id, code)
+        fragJawab = Jawab.newInstance(id, code, jeneng)
+        if (savedInstanceState!=null){
+            supportFragmentManager.getFragment(savedInstanceState, "gambar")?.let {
+                fragGambar = it
+            }
+            supportFragmentManager.getFragment(savedInstanceState, "jawab")?.let {
+                fragJawab = it
+            }
+        }else{
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_maen, fragGambar, "gambar")
+                .commitNow()
+            supportFragmentManager.beginTransaction()
+                .add(R.id.fragment_maen, fragJawab, "jawab")
+                .commitNow()
+        }
+        var second : Long = 5000
+        val builder = AlertDialog.Builder(this@Maen)
+        builder.setTitle("Wara-wara")
+        builder.setMessage("Koneksine seng gawe room gak stabil, buyar ae yo!")
+        builder.setPositiveButton("nggeh") { dialog, which ->
+            var intent = Intent(this@Maen, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            this@Maen.finish()
+        }
+        val timer = object: CountDownTimer(second, 1000) {
+            override fun onTick(p0: Long) {
+
+            }
+            override fun onFinish() {
+                builder.show()
+            }
+        }
+        timer.start()
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                timer.cancel()
+                second = 5000
+                timer.start()
                 var roomNumb = dataSnapshot.child("numb").value.toString()
                 var playerName = dataSnapshot.child("user").child(id).child("jeneng").value.toString()
                 var playerNumb = dataSnapshot.child("user").child(id).child("numb").value.toString()
@@ -37,30 +89,14 @@ class Maen : AppCompatActivity() {
                     }
                 }
                 if (playerNumb==roomNumb ){
-                    if (supportFragmentManager.findFragmentByTag("gambar")==null){
-                        var fragGambar = gambar.newInstance(id, code)
-                        supportFragmentManager.beginTransaction()
-                                .add(R.id.fragment_maen, fragGambar, "gambar")
-                                .commitNow()
-                    }else{
-                        supportFragmentManager.findFragmentByTag("jawab")?.let {
-                            supportFragmentManager.beginTransaction().hide(it).commitNow()
-                        }
-                        supportFragmentManager.findFragmentByTag("gambar")?.let {
-                            supportFragmentManager.beginTransaction().show(it).commitNow()
-                        }
+                    if (!this@Maen.isDestroyed){
+                        supportFragmentManager.beginTransaction().hide(fragJawab).commitNow()
+                        supportFragmentManager.beginTransaction().show(fragGambar).commitNow()
                     }
-                }else if(supportFragmentManager.findFragmentByTag("jawab")==null){
-                    var fragJawab = Jawab.newInstance(id, code, playerName)
-                    supportFragmentManager.beginTransaction()
-                        .add(R.id.fragment_maen, fragJawab, "jawab")
-                        .commitNow()
                 }else{
-                    supportFragmentManager.findFragmentByTag("gambar")?.let {
-                        supportFragmentManager.beginTransaction().hide(it).commitNow()
-                    }
-                    supportFragmentManager.findFragmentByTag("jawab")?.let {
-                        supportFragmentManager.beginTransaction().show(it).commitNow()
+                    if (!this@Maen.isDestroyed){
+                        supportFragmentManager.beginTransaction().hide(fragGambar).commitNow()
+                        supportFragmentManager.beginTransaction().show(fragJawab).commitNow()
                     }
                 }
             }
@@ -71,9 +107,14 @@ class Maen : AppCompatActivity() {
         ref.addValueEventListener(listener)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        bgThread.interrupt()
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (fragJawab.isAdded){
+            supportFragmentManager.putFragment(outState, "jawab", fragJawab)
+        }
+        if (fragGambar.isAdded){
+            supportFragmentManager.putFragment(outState, "gambar", fragGambar)
+        }
     }
 
     inner class runnable: Runnable {
@@ -86,9 +127,11 @@ class Maen : AppCompatActivity() {
                     Thread.sleep(1000)
                     time++
                     ref.child("timer").setValue(time)
-                    if (time<60){
-
-                    }else{
+                    val sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS")
+                    val now = Date()
+                    val strDate: String = sdfDate.format(now)
+                    ref.child("update").setValue(strDate)
+                    if (time>=60){
                         time=0
                         ref.get().addOnSuccessListener {
                             var numb = it.child("numb").value.toString()
@@ -104,8 +147,7 @@ class Maen : AppCompatActivity() {
                                 ref.child("gambar").setValue("")
                             }else{
                                 bgThread.interrupt()
-                                var intent = Intent(this@Maen, MainActivity::class.java)
-                                startActivity(intent)
+
                             }
                         }
                     }

@@ -1,6 +1,7 @@
 package com.example.papb_pa.waitingroom
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
@@ -15,15 +16,19 @@ import kotlinx.android.synthetic.main.activity_waiting_room.*
 import java.util.*
 
 class WaitingRoom : AppCompatActivity() {
+    private lateinit var code : String
+    private lateinit var jeneng : String
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_waiting_room)
+        maen_load.visibility = View.GONE
         var user = arrayListOf<User>()
         val heroAdapter = HeroAdapter(user)
         val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         var numUser = 0
-        val code=intent.getStringExtra("code").toString()
+        code=intent.getStringExtra("code").toString()
+        jeneng = intent.getStringExtra("jeneng").toString()
         val ref = database.reference.child("room").child(code)
         val refUser = ref.child("user")
         val postListener = object : ValueEventListener {
@@ -31,6 +36,7 @@ class WaitingRoom : AppCompatActivity() {
                 // Get Post object and use the values to update the UI
                 user.clear()
                 numUser = dataSnapshot.childrenCount.toInt()
+                bt_wr_maen.isEnabled = numUser >= 2
                 for (userSnapshot in dataSnapshot.children) {
                     user.add(
                         User(
@@ -38,6 +44,9 @@ class WaitingRoom : AppCompatActivity() {
                             userSnapshot.child("jeneng").getValue().toString()
                         )
                     )
+                }
+                if (user.size>0){
+                    load_player.visibility = View.GONE
                 }
                 heroAdapter.notifyDataSetChanged()
             }
@@ -56,6 +65,9 @@ class WaitingRoom : AppCompatActivity() {
         }
 
         bt_wr_maen.setOnClickListener {
+            bt_wr_maen.isEnabled = false
+            bt_wr_maen.visibility = View.GONE
+            maen_load.visibility = View.VISIBLE
             var i = 0;
             var soal = arrayListOf<String>()
             database.reference.child("soal").get().addOnSuccessListener {
@@ -87,7 +99,10 @@ class WaitingRoom : AppCompatActivity() {
                 if (dataSnapshot.exists()){
                     var intent = Intent(this@WaitingRoom, Maen::class.java)
                     intent.putExtra("code", code)
+                    intent.putExtra("jeneng", jeneng)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
+                    this@WaitingRoom.finish()
                 }
             }
 
@@ -101,5 +116,10 @@ class WaitingRoom : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@WaitingRoom)
             adapter = heroAdapter
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        database.reference.child("room").child(code).removeValue()
     }
 }
