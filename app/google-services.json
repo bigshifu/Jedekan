@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "694823455269",
+    "firebase_url": "https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "jedekan-gambar",
+    "storage_bucket": "jedekan-gambar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694823455269:android:697798081815a141980dcc",
+        "android_client_info": {
+          "package_name": "com.example.papb_pa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694823455269-uutanlp2bj08su5bl3988mkavcv50ic8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXw8uCvOGa2Krbx577RnNewdEKMMbDq4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694823455269-uutanlp2bj08su5bl3988mkavcv50ic8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:694823455269:android:01860353a1f5a840980dcc",
+        "android_client_info": {
+          "package_name": "com.papb.jedekangambar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "694823455269-uutanlp2bj08su5bl3988mkavcv50ic8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXw8uCvOGa2Krbx577RnNewdEKMMbDq4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "694823455269-uutanlp2bj08su5bl3988mkavcv50ic8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

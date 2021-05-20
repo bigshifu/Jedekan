@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="10dp"
+        android:id="@+id/room_player_container">
+        <TextView
+            android:id="@+id/numplayer"
+            android:text="0/10"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/bgnumplayer"
+            android:textAlignment="center"
+            android:paddingTop="15dp"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:textColor="#fff"
+            />
+        <TextView
+            android:id="@+id/jeneng_room"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:text="Jeneng Player"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#B2B2B2"
+        android:layout_below="@id/room_player_container"
+        android:layout_marginHorizontal="10sp"
+        />
+</RelativeLayout>

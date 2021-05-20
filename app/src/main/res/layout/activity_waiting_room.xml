@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#03A9F4"
+    tools:context=".waitingroom.WaitingRoom"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/frameLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bgmain" />
+
+        <FrameLayout
+            android:id="@+id/friendContainer"
+            android:layout_width="match_parent"
+            android:layout_height="450dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_putih"
+            android:padding="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/titlecontainer">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvWaitingroom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"></androidx.recyclerview.widget.RecyclerView>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/friendContainer"
+            android:gravity="center_horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/friendContainer">
+
+            <Button
+                android:id="@+id/bt_wr_maen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/button"
+                android:text="MAEN"
+                android:textColor="#4CAF50"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/titlecontainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/IV_Jedekan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="45dp"
+                android:src="@drawable/title_arekarek" />
+        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#03A9F4"
+    tools:context=".Game.Jawab"
+    android:fillViewport="true">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/FL_gambar"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.4"
+            android:layout_marginTop="4dp"
+            android:background="#fff"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_weight="3"
+            tools:layout_editor_absoluteX="-32dp">
+
+            <ImageView
+                android:id="@+id/gambar_realtime"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ProgressBar
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:id="@+id/jawab_timer"
+                android:layout_gravity="bottom"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:indeterminate="false"
+                android:max="60"
+                android:progress="1"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/LL_nama_TG"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintTop_toBottomOf="@+id/FL_gambar"
+            app:layout_constraintVertical_weight="7">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/RV_namaPemain"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginVertical="15dp"></androidx.recyclerview.widget.RecyclerView>
+            </LinearLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="match_parent"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_biru">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/RV_pesan"
+                        android:layout_width="match_parent"
+                        android:descendantFocusability="blocksDescendants"
+                        android:layout_height="0dp"
+                        android:layout_weight="6"
+                        android:layout_margin="23dp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:padding="10dp"
+                        android:orientation="horizontal">
+                        <EditText
+                            android:id="@+id/et_pesan"
+                            android:padding="5dp"
+                            android:layout_width="0dp"
+                            android:layout_weight="7"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/form_jawaban"
+                            android:hint="Jawaban" />
+                        <Button
+                            android:id="@+id/bt_send"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/send" />
+                    </LinearLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
