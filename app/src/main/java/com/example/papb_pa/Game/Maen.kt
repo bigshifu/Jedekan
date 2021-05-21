@@ -90,13 +90,13 @@ class Maen : AppCompatActivity() {
                 }
                 if (playerNumb==roomNumb ){
                     if (!this@Maen.isDestroyed){
-                        supportFragmentManager.beginTransaction().hide(fragJawab).commitNow()
-                        supportFragmentManager.beginTransaction().show(fragGambar).commitNow()
+                        supportFragmentManager.beginTransaction().hide(fragJawab).commit()
+                        supportFragmentManager.beginTransaction().show(fragGambar).commit()
                     }
                 }else{
                     if (!this@Maen.isDestroyed){
-                        supportFragmentManager.beginTransaction().hide(fragGambar).commitNow()
-                        supportFragmentManager.beginTransaction().show(fragJawab).commitNow()
+                        supportFragmentManager.beginTransaction().hide(fragGambar).commit()
+                        supportFragmentManager.beginTransaction().show(fragJawab).commit()
                     }
                 }
             }
