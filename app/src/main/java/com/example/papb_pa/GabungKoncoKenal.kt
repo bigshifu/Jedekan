@@ -30,6 +30,7 @@ class GabungKoncoKenal : AppCompatActivity() {
                     ref.child("user").setValue(nwUser).addOnSuccessListener {
                         var intent = Intent(this, WaitingRoom::class.java)
                         intent.putExtra("code", code)
+                        intent.putExtra("jeneng", jeneng)
                         startActivity(intent)
                     }
                 }

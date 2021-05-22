@@ -58,7 +58,7 @@ class Maen : AppCompatActivity() {
                 .add(R.id.fragment_maen, fragJawab, "jawab")
                 .commitNow()
         }
-        var second : Long = 5000
+        var second : Long = 15000
         val builder = AlertDialog.Builder(this@Maen)
         builder.setTitle("Wara-wara")
         builder.setMessage("Koneksine seng gawe room gak stabil, buyar ae yo!")
@@ -82,16 +82,25 @@ class Maen : AppCompatActivity() {
         val listener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 timer.cancel()
-                second = 5000
+                second = 15000
                 timer.start()
+                var maen = dataSnapshot.child("maen").value.toString()
                 var roomNumb = dataSnapshot.child("numb").value.toString()
-                var playerName = dataSnapshot.child("user").child(id).child("jeneng").value.toString()
                 var playerNumb = dataSnapshot.child("user").child(id).child("numb").value.toString()
                 var idRoom = dataSnapshot.child("id").value.toString()
                 if (idRoom==id && !dataSnapshot.hasChild("timer")){
                     if (bgThread.state == Thread.State.NEW){
                         bgThread = Thread(runnable())
                         bgThread.start()
+                    }
+                }
+                if (maen == "false"){
+                    if (this@Maen.isDestroyed){
+                        var intent = Intent(this@Maen, leaderboard::class.java)
+                        intent.putExtra("code", code)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(intent)
+                        this@Maen.finish()
                     }
                 }
                 if (playerNumb==roomNumb ){
@@ -150,14 +159,9 @@ class Maen : AppCompatActivity() {
                                 time=0
                                 ref.child("round").setValue(Integer.parseInt(round)+1)
                                 ref.child("numb").setValue(1)
-                                ref.child("gambar").setValue("")
                             }else{
                                 bgThread.interrupt()
-                                var intent = Intent(this@Maen, leaderboard::class.java)
-                                intent.putExtra("code", code)
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                                startActivity(intent)
-                                this@Maen.finish()
+                                ref.child("maen").setValue("false")
                             }
                         }
                     }

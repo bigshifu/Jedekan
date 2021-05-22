@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.R
@@ -40,6 +41,9 @@ class GabungWongLiyo  : AppCompatActivity() {
                             )
                         )
                     }
+                }
+                if (room.size>0){
+                    load_room.visibility = View.GONE
                 }
                 roomAdapter.notifyDataSetChanged()
             }

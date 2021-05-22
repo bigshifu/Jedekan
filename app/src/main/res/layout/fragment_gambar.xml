@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/soal_gambar"
                 android:text="mentok"
-                android:layout_gravity="center|top"/>
+                android:layout_gravity="right|top"/>
 
             <ProgressBar
                 android:layout_width="match_parent"
@@ -73,12 +73,6 @@
                         android:layout_margin="23dp" />
                 </LinearLayout>
             </FrameLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
