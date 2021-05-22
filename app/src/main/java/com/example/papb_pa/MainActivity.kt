@@ -32,5 +32,9 @@ class MainActivity : AppCompatActivity() {
             var intent = Intent(this, GabungWongLiyo::class.java)
             startActivity(intent)
         }
+        btnJoinFriend.setOnClickListener {
+            var intent = Intent(this, GabungKoncoKenal::class.java)
+            startActivity(intent)
+        }
     }
 }

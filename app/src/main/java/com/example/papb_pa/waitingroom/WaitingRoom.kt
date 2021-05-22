@@ -31,6 +31,7 @@ class WaitingRoom : AppCompatActivity() {
         code=intent.getStringExtra("code").toString()
         jeneng = intent.getStringExtra("jeneng").toString()
         val ref = database.reference.child("room").child(code)
+        showCode.text = code
         val refUser = ref.child("user")
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

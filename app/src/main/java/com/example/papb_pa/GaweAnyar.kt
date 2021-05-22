@@ -33,22 +33,23 @@ class GaweAnyar : AppCompatActivity() {
                 var setCode = randomCode()
                 TV_code.text = setCode
             }while (it.hasChild(setCode))
-        }
-        var jeneng = "Paijo"
-        var code = TV_code.text.toString()
-        bt_ga_maen.setOnClickListener {
-            var et = et_ga_jeneng.text.toString()
-            if (jeneng != ""){
-                jeneng = et
-            }
-            var value = storeRoom(code, id, jeneng)
-            database.reference.child("room").child(code).setValue(value).addOnCompleteListener {
-                var master = User(id, jeneng)
-                database.reference.child("room").child(code).child("user").child(id.toString()).setValue(master).addOnCompleteListener {
-                    var intent = Intent(this, WaitingRoom::class.java)
-                    intent.putExtra("code", code)
-                    intent.putExtra("jeneng", jeneng)
-                    startActivity(intent)
+
+            var jeneng = "Paijo"
+            var code = TV_code.text.toString()
+            bt_ga_maen.setOnClickListener {
+                var et = et_ga_jeneng.text.toString()
+                if (et != ""){
+                    jeneng = et
+                }
+                var value = storeRoom(code, id, jeneng)
+                database.reference.child("room").child(code).setValue(value).addOnCompleteListener {
+                    var master = User(id, jeneng)
+                    database.reference.child("room").child(code).child("user").child(id.toString()).setValue(master).addOnCompleteListener {
+                        var intent = Intent(this, WaitingRoom::class.java)
+                        intent.putExtra("code", code)
+                        intent.putExtra("jeneng", jeneng)
+                        startActivity(intent)
+                    }
                 }
             }
         }
