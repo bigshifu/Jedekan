@@ -28,6 +28,6 @@ class HeroHolder(view: View) : RecyclerView.ViewHolder(view) {
 
     fun bindHero(hero: User) {
         tvHeroName.text = hero.jeneng
-        tvRank.text = adapterPosition.toString()
+        tvRank.text = (adapterPosition+1).toString()
     }
 }

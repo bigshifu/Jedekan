@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.Game.Maen
+import com.example.papb_pa.MainActivity
 import com.google.firebase.database.*
 import com.example.papb_pa.R
 import com.example.papb_pa.data.User
@@ -26,7 +28,6 @@ class WaitingRoom : AppCompatActivity() {
         var user = arrayListOf<User>()
         val heroAdapter = HeroAdapter(user)
         val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
-        var numUser = 0
         code=intent.getStringExtra("code").toString()
         jeneng = intent.getStringExtra("jeneng").toString()
         val ref = database.reference.child("room").child(code)
@@ -35,8 +36,6 @@ class WaitingRoom : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
                 user.clear()
-                numUser = dataSnapshot.childrenCount.toInt()
-                bt_wr_maen.isEnabled = numUser >= 1
                 for (userSnapshot in dataSnapshot.children) {
                     user.add(
                         User(
@@ -69,29 +68,42 @@ class WaitingRoom : AppCompatActivity() {
             bt_wr_maen.visibility = View.GONE
             maen_load.visibility = View.VISIBLE
             var i = 0;
-            var soal = arrayListOf<String>()
-            database.reference.child("soal").get().addOnSuccessListener {
-                it.children.forEach { dataSnapshot ->
-                    soal.add(dataSnapshot.value.toString())
-                }
-                soal.shuffle()
-                ref.child("soal").get().addOnSuccessListener {
-                    if (!it.exists()){
-                        ref.child("soal").setValue(soal.subList(0,user.size))
+            refUser.get().addOnSuccessListener { snapshot ->
+                if (snapshot.childrenCount > 1){
+                    var soal = arrayListOf<String>()
+                    database.reference.child("soal").get().addOnSuccessListener { value ->
+                        value.children.forEach { dataSnapshot ->
+                            soal.add(dataSnapshot.value.toString())
+                        }
+                        soal.shuffle()
+                        ref.child("soal").get().addOnSuccessListener {
+                            if (!it.exists()){
+                                ref.child("soal").setValue(soal.subList(0,user.size))
+                            }
+                        }
                     }
-                }
-            }
-            refUser.get().addOnSuccessListener {
-                    it.children.forEach { user ->
+                    snapshot.children.forEach { user ->
                         i++
                         refUser.child(user.key.toString()).child("numb").setValue(i)
                         refUser.child(user.key.toString()).child("poin").setValue(0)
                     }
+
+                    var roomRef = database.reference.child("room").child(code)
+                    roomRef.child("maen").setValue(true)
+                    roomRef.child("round").setValue(1)
+                    roomRef.child("numb").setValue(1)
+                } else{
+                    val builder = AlertDialog.Builder(this@WaitingRoom)
+                    builder.setTitle("Wara-wara")
+                    builder.setMessage("Pemaine kurang, entenono sek")
+                    builder.setPositiveButton("nggeh") { dialog, which ->
+                        bt_wr_maen.isEnabled = true
+                        bt_wr_maen.visibility = View.VISIBLE
+                        maen_load.visibility = View.GONE
+                    }
+                    builder.show()
                 }
-            var roomRef = database.reference.child("room").child(intent.getStringExtra("code").toString())
-            roomRef.child("maen").setValue(true)
-            roomRef.child("round").setValue(1)
-            roomRef.child("numb").setValue(1)
+            }
         }
         val maenListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
