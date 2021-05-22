@@ -1,7 +1,12 @@
 package com.example.papb_pa.Game
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -9,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +30,7 @@ import kotlinx.android.synthetic.main.view_gambar.view.*
 import java.io.ByteArrayOutputStream
 import java.lang.reflect.Field
 import java.util.*
+import kotlin.math.sqrt
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -42,12 +49,18 @@ class gambar : Fragment() {
     var onDraw : Boolean = true
     private lateinit var viewF : View
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
+    private var sensorManager: SensorManager? = null
+    private var acceleration = 0f
+    private var currentAcceleration = 0f
+    private var lastAcceleration = 0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             id = it.getString(ARG_PARAM1)
             code = it.getString(ARG_PARAM2)
         }
+
     }
 
 
@@ -83,7 +96,7 @@ class gambar : Fragment() {
                 if (numb != "null" && playerNumb !="null"){
                     soal = snapshot.child("soal").child((Integer.parseInt(numb) - 1).toString()).value.toString()
                     if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb){
-                        uploadGambar(convert(viewF.draw_view.getBitmap()))
+                        uploadGambar(convert(viewF.draw_view.getBitmap()), playerNumb)
                     }
                 }
                 if (soal != "null")
@@ -97,14 +110,36 @@ class gambar : Fragment() {
                 TODO("Not yet implemented")
             }
 
+
         }
         ref.addValueEventListener(listener)
         getPesan(viewF)
+        sensorManager = viewF.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!
+            .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+        acceleration = 10f
+        currentAcceleration = SensorManager.GRAVITY_EARTH
+        lastAcceleration = SensorManager.GRAVITY_EARTH
         return viewF
     }
 
-    private fun uploadGambar(string: String) {
-        database.reference.child("room").child(code.toString()).child("gambar").setValue(string)
+    private val sensorListener: SensorEventListener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent) {
+            val x = event.values[0]
+            val y = event.values[1]
+            val z = event.values[2]
+            lastAcceleration = currentAcceleration
+            currentAcceleration = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
+            val delta: Float = currentAcceleration - lastAcceleration
+            acceleration = acceleration * 0.9f + delta
+            if (acceleration > 12) {
+                viewF.draw_view.clearCanvas()
+            }
+        }
+        override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+    }
+    private fun uploadGambar(string: String, numb : String) {
+        database.reference.child("room").child(code.toString()).child("gambar").child(numb).setValue(string)
     }
 
     private fun getPesan(view: View){
@@ -298,7 +333,16 @@ class gambar : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
-
+    override fun onResume() {
+        sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
+            Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
+        )
+        super.onResume()
+    }
+    override fun onPause() {
+        sensorManager!!.unregisterListener(sensorListener)
+        super.onPause()
+    }
     private fun setPaintAlpha(view: View) {
         view.seekBar_opacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

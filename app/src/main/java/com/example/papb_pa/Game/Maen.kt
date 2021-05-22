@@ -1,7 +1,9 @@
 package com.example.papb_pa.Game
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.example.papb_pa.MainActivity
 import com.google.firebase.database.*
 import com.example.papb_pa.R
+import com.example.papb_pa.leaderboard
 import kotlinx.android.synthetic.main.activity_maen_game.*
 import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.view_gambar.*
@@ -23,17 +26,18 @@ class Maen : AppCompatActivity() {
     private var time = 0
     private var code = ""
     private var jeneng = ""
-    private lateinit var dialog: AlertDialog
     private var bgThread = Thread()
     private lateinit var fragGambar : Fragment
     private lateinit var fragJawab: Fragment
+    private lateinit var sharedpreference : SharedPreferences
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maen_game)
         code = intent.getStringExtra("code").toString()
         jeneng = intent.getStringExtra("jeneng").toString()
-        val id = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        sharedpreference = getSharedPreferences("preference", Context.MODE_PRIVATE)
+        val id = sharedpreference.getString("id","").toString()
         var ref = database.reference
             .child("room")
             .child(code)
@@ -69,7 +73,9 @@ class Maen : AppCompatActivity() {
 
             }
             override fun onFinish() {
-                builder.show()
+                if (!this@Maen.isFinishing) {
+                    builder.show()
+                }
             }
         }
         timer.start()
@@ -90,13 +96,13 @@ class Maen : AppCompatActivity() {
                 }
                 if (playerNumb==roomNumb ){
                     if (!this@Maen.isDestroyed){
-                        supportFragmentManager.beginTransaction().hide(fragJawab).commit()
-                        supportFragmentManager.beginTransaction().show(fragGambar).commit()
+                        supportFragmentManager.beginTransaction().hide(fragJawab).commitNowAllowingStateLoss()
+                        supportFragmentManager.beginTransaction().show(fragGambar).commitNowAllowingStateLoss()
                     }
                 }else{
                     if (!this@Maen.isDestroyed){
-                        supportFragmentManager.beginTransaction().hide(fragGambar).commit()
-                        supportFragmentManager.beginTransaction().show(fragJawab).commit()
+                        supportFragmentManager.beginTransaction().hide(fragGambar).commitNowAllowingStateLoss()
+                        supportFragmentManager.beginTransaction().show(fragJawab).commitNowAllowingStateLoss()
                     }
                 }
             }
@@ -147,7 +153,11 @@ class Maen : AppCompatActivity() {
                                 ref.child("gambar").setValue("")
                             }else{
                                 bgThread.interrupt()
-
+                                var intent = Intent(this@Maen, leaderboard::class.java)
+                                intent.putExtra("code", code)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+                                this@Maen.finish()
                             }
                         }
                     }

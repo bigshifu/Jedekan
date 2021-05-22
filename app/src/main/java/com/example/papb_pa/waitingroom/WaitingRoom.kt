@@ -36,7 +36,7 @@ class WaitingRoom : AppCompatActivity() {
                 // Get Post object and use the values to update the UI
                 user.clear()
                 numUser = dataSnapshot.childrenCount.toInt()
-                bt_wr_maen.isEnabled = numUser >= 2
+                bt_wr_maen.isEnabled = numUser >= 1
                 for (userSnapshot in dataSnapshot.children) {
                     user.add(
                         User(

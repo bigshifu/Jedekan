@@ -82,7 +82,8 @@ class Jawab : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
                 var time = dataSnapshot.child("timer").value.toString()
-                var bm = dataSnapshot.child("gambar").value.toString()
+                var numb = dataSnapshot.child("numb").value.toString()
+                var bm = dataSnapshot.child("gambar").child(numb).value.toString()
                 if (time != "null" && time !=""){
                     view.jawab_timer.setProgress(Integer.parseInt(time))
                 }

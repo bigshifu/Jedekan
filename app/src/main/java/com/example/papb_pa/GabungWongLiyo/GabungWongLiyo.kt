@@ -1,8 +1,9 @@
 package com.example.papb_pa.GabungWongLiyo
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.R
@@ -16,9 +17,12 @@ import kotlinx.android.synthetic.main.activity_waiting_room.*
 
 class GabungWongLiyo  : AppCompatActivity() {
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gabung_wong_liyo)
+
+
         var room = arrayListOf<getRoom>()
         val roomAdapter = RoomAdapter(room)
         val postListener = object : ValueEventListener {
@@ -28,18 +32,14 @@ class GabungWongLiyo  : AppCompatActivity() {
                 for (roomSnapshot in dataSnapshot.children) {
                     if (!roomSnapshot.hasChild("maen")){
                         room.add(
-                                getRoom(
-                                        roomSnapshot.child("code").getValue().toString(),
-                                        roomSnapshot.child("id").getValue().toString(),
-                                        roomSnapshot.child("jeneng").getValue().toString(),
-                                        roomSnapshot.child("user").childrenCount.toInt()
-                                )
+                            getRoom(
+                                roomSnapshot.child("code").getValue().toString(),
+                                roomSnapshot.child("id").getValue().toString(),
+                                roomSnapshot.child("jeneng").getValue().toString(),
+                                roomSnapshot.child("user").childrenCount.toInt()
+                            )
                         )
-                    }else if (roomSnapshot.child("maen").value.toString() == " false")
-                        database.reference.child("room").child(roomSnapshot.key.toString()).removeValue()
-                }
-                if (room.size>0){
-                    load_room.visibility = View.GONE
+                    }
                 }
                 roomAdapter.notifyDataSetChanged()
             }

@@ -9,9 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TebakGambarActivity"></activity>
-        <activity android:name=".GabungKoncoKenal"></activity>
-        <activity android:name=".Game.Maen" />
+        <activity android:name=".leaderboard"></activity>
+        <activity android:name=".TebakGambarActivity" />
+        <activity android:name=".GabungKoncoKenal" />
+        <activity
+            android:name=".Game.Maen"
+            android:screenOrientation="portrait" />
         <activity android:name=".GabungWongLiyo.GabungWongLiyo" />
         <activity android:name=".waitingroom.WaitingRoom" />
         <activity android:name=".GaweAnyar" />

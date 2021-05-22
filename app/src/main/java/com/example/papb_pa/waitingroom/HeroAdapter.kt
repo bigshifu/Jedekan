@@ -7,11 +7,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.papb_pa.R
 import com.example.papb_pa.data.User
 import kotlinx.android.synthetic.main.rowview.view.*
+import kotlinx.android.synthetic.main.rowview3.view.*
 
 class HeroAdapter(private val heroes: List<User>) : RecyclerView.Adapter<HeroHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): HeroHolder {
-        return HeroHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.rowview, viewGroup, false))
+        return HeroHolder(LayoutInflater.from(viewGroup.context).inflate(R.layout.rowview3, viewGroup, false))
     }
 
     override fun getItemCount(): Int = heroes.size
@@ -22,9 +23,11 @@ class HeroAdapter(private val heroes: List<User>) : RecyclerView.Adapter<HeroHol
 }
 
 class HeroHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val tvHeroName = view.text1
+    private val tvHeroName = view.jeneng_player_rank
+    private val tvRank = view.rank
 
     fun bindHero(hero: User) {
         tvHeroName.text = hero.jeneng
+        tvRank.text = adapterPosition.toString()
     }
 }
