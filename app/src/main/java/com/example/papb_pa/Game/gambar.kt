@@ -1,6 +1,7 @@
 package com.example.papb_pa.Game
 
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.hardware.Sensor
@@ -18,6 +19,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.papb_pa.Logout
 import com.example.papb_pa.R
 import com.example.papb_pa.data.Pesan
 import com.google.firebase.database.DataSnapshot
@@ -25,6 +27,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_gambar.view.*
+import kotlinx.android.synthetic.main.fragment_jawab.view.*
 import kotlinx.android.synthetic.main.view_color_palette.view.*
 import kotlinx.android.synthetic.main.view_gambar.view.*
 import java.io.ByteArrayOutputStream
@@ -80,6 +83,10 @@ class gambar : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         viewF = inflater.inflate(R.layout.fragment_gambar, container, false)
+        viewF.IB_FG_keluar.setOnClickListener {
+            val i = Intent(activity, Logout::class.java)
+            startActivity(i)
+        }
         setUpDrawTools(viewF)
         colorSelector(viewF)
         setPaintAlpha(viewF)

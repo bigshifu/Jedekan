@@ -20,7 +20,10 @@
                 android:paddingTop="8dp"
                 android:text="Nama"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="12sp" />
+
+                android:autoSizeMinTextSize="4sp"
+                android:autoSizeMaxTextSize="5sp"
+                android:autoSizeStepGranularity="0.5sp" />
             <TextView
                 android:id="@+id/tv_pesan"
                 android:layout_width="match_parent"
@@ -28,7 +31,9 @@
                 android:paddingTop="8dp"
                 android:text="Pesan"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="20sp"
+                android:autoSizeMinTextSize="4sp"
+                android:autoSizeMaxTextSize="8sp"
+                android:autoSizeStepGranularity="1sp"
                 android:textStyle="bold"/>
         </LinearLayout>
     </LinearLayout>

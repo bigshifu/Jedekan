@@ -9,12 +9,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".Logout"
+            android:theme="@style/AppTheme.Logout">
+        </activity>
         <activity android:name=".leaderboard"></activity>
-        <activity android:name=".TebakGambarActivity" />
+        <activity android:name=".TebakGambarActivity"></activity>
         <activity android:name=".GabungKoncoKenal" />
         <activity
             android:name=".Game.Maen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".GabungWongLiyo.GabungWongLiyo" />
         <activity android:name=".waitingroom.WaitingRoom" />
         <activity android:name=".GaweAnyar" />
@@ -25,6 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

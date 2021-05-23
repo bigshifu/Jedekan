@@ -29,6 +29,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <ImageButton
+                android:id="@+id/IB_FJ_keluar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/keluar"
+                android:layout_gravity="right"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"/>
+
             <ProgressBar
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -92,6 +101,8 @@
                             android:padding="5dp"
                             android:layout_width="0dp"
                             android:layout_weight="7"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
                             android:layout_height="wrap_content"
                             android:background="@drawable/form_jawaban"
                             android:hint="Jawaban" />

@@ -12,7 +12,8 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginVertical="5dp">
 
         <TextView
             android:id="@+id/rank"
@@ -34,10 +35,12 @@
             android:id="@+id/jeneng_player_rank"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="10dp"
+            android:paddingTop="13dp"
             android:text="Jeneng Player"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="20sp"
+            android:autoSizeMinTextSize="4sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:textStyle="bold" />
 
     </LinearLayout>
