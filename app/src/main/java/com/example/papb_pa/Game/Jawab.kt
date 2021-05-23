@@ -52,8 +52,6 @@ class Jawab : Fragment() {
             code = it.getString(ARG_PARAM2)
             jeneng = it.getString(ARG_PARAM3)
         }
-        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        et_pesan.requestFocus()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -69,7 +67,6 @@ class Jawab : Fragment() {
                 soal.add(it.value.toString())
             }
         }
-
         view.bt_send.setOnClickListener {
             onSend(view)
         }
