@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_gambar.view.*
 import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.fragment_jawab.view.*
+import kotlinx.android.synthetic.main.view_gambar.view.*
 import java.lang.reflect.Field
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,7 +45,6 @@ class Jawab : Fragment() {
     private  var code : String? = null
     private var jeneng : String? = null
     private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
-    var soal = arrayListOf<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,11 +62,6 @@ class Jawab : Fragment() {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_jawab, container, false)
         setNamaPemain(view)
-        database.reference.child("soal").get().addOnSuccessListener { snapshot ->
-            snapshot.children.forEach {
-                soal.add(it.value.toString())
-            }
-        }
         view.bt_send.setOnClickListener {
             onSend(view)
         }
@@ -109,19 +104,35 @@ class Jawab : Fragment() {
     private fun onSend(view: View){
         var pesan = view.et_pesan.text.toString()
         view.et_pesan.text.clear()
+        var ref = database.reference.child("room")
+            .child(code.toString())
         var refPoin = database.reference.child("room")
             .child(code.toString()).child("user")
             .child(id.toString())
             .child("poin")
-        if (soal.contains(pesan.toLowerCase())){
-            sendPesan("Jawabane $jeneng bener")
-            refPoin.get().addOnSuccessListener {
-                refPoin.setValue(Integer.parseInt(it.value.toString()) + 10)
-            }
-        }else{
-            sendPesan("Jawabane $jeneng salah")
-            refPoin.get().addOnSuccessListener {
-                refPoin.setValue(Integer.parseInt(it.value.toString()) - 3)
+        ref.get().addOnSuccessListener {
+            var numb : String = ""
+            var soal : String = ""
+            var round = ""
+            round = it.child("round").value.toString()
+            numb = it.child("numb").value.toString()
+            if (numb != "null" && round != "null"){
+                var roundInt = Integer.parseInt(round)
+                var numbInt = Integer.parseInt(numb)
+                soal = it.child("soal").child(((roundInt*numbInt) - 1).toString()).value.toString()
+                if (soal != "null"){
+                    if (soal == pesan.toLowerCase()){
+                        sendPesan("Jawabane $jeneng bener")
+                        refPoin.get().addOnSuccessListener {
+                            refPoin.setValue(Integer.parseInt(it.value.toString()) + 10)
+                        }
+                    }else{
+                        sendPesan("Jawabane $jeneng salah")
+                        refPoin.get().addOnSuccessListener {
+                            refPoin.setValue(Integer.parseInt(it.value.toString()) - 3)
+                        }
+                    }
+                }
             }
         }
     }

@@ -96,12 +96,16 @@ class gambar : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 var numb : String = ""
                 var soal : String = ""
+                var round = ""
                 var timer : String = "0"
+                round = snapshot.child("round").value.toString()
                 var playerNumb = snapshot.child("user").child(id.toString()).child("numb").value.toString()
                 numb = snapshot.child("numb").value.toString()
                 timer = snapshot.child("timer").value.toString()
-                if (numb != "null" && playerNumb !="null"){
-                    soal = snapshot.child("soal").child((Integer.parseInt(numb) - 1).toString()).value.toString()
+                if (numb != "null" && playerNumb !="null" && round != "null"){
+                    var roundInt = Integer.parseInt(round)
+                    var numbInt = Integer.parseInt(numb)
+                    soal = snapshot.child("soal").child(((roundInt*numbInt) - 1).toString()).value.toString()
                     if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb){
                         uploadGambar(convert(viewF.draw_view.getBitmap()), playerNumb)
                     }

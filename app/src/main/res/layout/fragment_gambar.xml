@@ -33,6 +33,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/soal_gambar"
                 android:text="mentok"
+                android:layout_margin="12dp"
+                android:textSize="16dp"
                 android:layout_gravity="right|top"/>
 
             <ImageButton

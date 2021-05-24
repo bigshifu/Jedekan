@@ -41,15 +41,6 @@ class leaderboard : AppCompatActivity() {
                     )
                 )
             }
-            database.reference.child("room").child(code).child("user").get().addOnSuccessListener {
-                if (it.exists()){
-                    if (it.childrenCount < 1){
-                        database.reference.child("room").child(code).removeValue()
-                    }else{
-                        database.reference.child("room").child(code).child("user").child(id).removeValue()
-                    }
-                }
-            }
         }
 
         rv_peringkat.apply {

@@ -36,6 +36,9 @@ class WaitingRoom : AppCompatActivity() {
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 // Get Post object and use the values to update the UI
+                if (dataSnapshot.childrenCount>=10){
+                    ref.child("maen").setValue("true")
+                }
                 user.clear()
                 for (userSnapshot in dataSnapshot.children) {
                     user.add(
@@ -79,7 +82,7 @@ class WaitingRoom : AppCompatActivity() {
                         soal.shuffle()
                         ref.child("soal").get().addOnSuccessListener {
                             if (!it.exists()){
-                                ref.child("soal").setValue(soal.subList(0,user.size))
+                                ref.child("soal").setValue(soal.subList(0,user.size*3))
                             }
                         }
                     }

@@ -6,33 +6,21 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/gambar"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <activity
-            android:name=".Logout"
-            android:theme="@style/AppTheme.Logout"></activity>
-        <activity android:name=".leaderboard" />
+        <receiver android:name=".Notif" />
+        <activity android:name=".leaderboard"></activity>
         <activity android:name=".TebakGambarActivity" />
         <activity android:name=".GabungKoncoKenal" />
         <activity
             android:name=".Game.Maen"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait" />
         <activity android:name=".GabungWongLiyo.GabungWongLiyo" />
         <activity android:name=".waitingroom.WaitingRoom" />
         <activity android:name=".GaweAnyar" />
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Splash"
-            android:noHistory="true">
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

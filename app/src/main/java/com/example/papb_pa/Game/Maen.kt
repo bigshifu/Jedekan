@@ -1,6 +1,8 @@
 package com.example.papb_pa.Game
 
 import android.app.Activity
+import android.app.Notification.EXTRA_NOTIFICATION_ID
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,11 +13,12 @@ import android.os.PersistableBundle
 import android.provider.Settings
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
-import com.example.papb_pa.MainActivity
-import com.google.firebase.database.*
+import com.example.papb_pa.*
 import com.example.papb_pa.R
-import com.example.papb_pa.leaderboard
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_maen_game.*
 import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.view_gambar.*
@@ -24,9 +27,13 @@ import java.time.Instant.now
 import java.util.*
 
 class Maen : AppCompatActivity() {
+    companion object{
+        lateinit var maen : Activity
+    }
     private var time = 0
     private var code = ""
     private var jeneng = ""
+    private var id = ""
     private var bgThread = Thread()
     private lateinit var fragGambar : Fragment
     private lateinit var fragJawab: Fragment
@@ -35,10 +42,11 @@ class Maen : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maen_game)
+        maen = this@Maen
         code = intent.getStringExtra("code").toString()
         jeneng = intent.getStringExtra("jeneng").toString()
         sharedpreference = getSharedPreferences("preference", Context.MODE_PRIVATE)
-        val id = sharedpreference.getString("id","").toString()
+        id = sharedpreference.getString("id","").toString()
         var ref = database.reference
             .child("room")
             .child(code)
@@ -133,17 +141,65 @@ class Maen : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val joinIntent = Intent(this, Notif::class.java).apply {
+            this.putExtra("action", "join")
+            this.putExtra("code", code)
+            this.putExtra("jeneng", jeneng)
+            this.putExtra("id", id)
+        }
+        val exitIntent = Intent(this, Notif::class.java).apply {
+            this.putExtra("action", "exit")
+        }
+        val joinPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 1, joinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val exitPendingIntent: PendingIntent =
+            PendingIntent.getBroadcast(this, 2, exitIntent, 0)
+        val builder = NotificationCompat.Builder(this, "running")
+            .setSmallIcon(R.drawable.gambarmenu)
+            .setContentTitle("Wara-wara")
+            .setContentText("Gamemu sek mlaku")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .addAction(R.drawable.keluar, "Join", joinPendingIntent)
+            .addAction(R.drawable.keluar, "Exit", exitPendingIntent)
+            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0))
+            .setAutoCancel(true)
+
+        with(NotificationManagerCompat.from(this)) {
+
+            // notificationId is a unique int for each notification that you must define
+
+            notify(1, builder.build())
+
+        }
+
+    }
+
+
+
     inner class runnable: Runnable {
+
         var ref = database.reference
+
                 .child("room")
+
                 .child(code)
+
         override fun run() {
+
             try {
+
                 while (true){
+
                     Thread.sleep(1000)
+
                     time++
+
                     ref.child("timer").setValue(time)
+
                     val sdfDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS")
+
                     val now = Date()
                     val strDate: String = sdfDate.format(now)
                     ref.child("update").setValue(strDate)
@@ -156,20 +212,24 @@ class Maen : AppCompatActivity() {
                             if (Integer.parseInt(numb)<userSize){
                                 time=0
                                 ref.child("numb").setValue(Integer.parseInt(numb)+1)
-                            }else if(Integer.parseInt(round)<3){
+                            }else if(Integer.parseInt(round)<2){
                                 time=0
                                 ref.child("round").setValue(Integer.parseInt(round)+1)
+
                                 ref.child("numb").setValue(1)
                             }else{
                                 bgThread.interrupt()
+
                                 ref.child("maen").setValue("false")
                             }
                         }
+
                     }
                 }
             }catch (e : InterruptedException){
                 e.printStackTrace()
             }
         }
+
     }
 }

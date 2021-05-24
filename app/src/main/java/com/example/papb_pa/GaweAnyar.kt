@@ -26,14 +26,14 @@ class GaweAnyar : AppCompatActivity() {
         sharedpreference = getSharedPreferences("preference", Context.MODE_PRIVATE)
 
         val id = sharedpreference.getString("id","")
-
+        bt_ga_maen.isEnabled = false
         database.reference.child("room").get().addOnSuccessListener {
 
             do {
                 var setCode = randomCode()
                 TV_code.text = setCode
             }while (it.hasChild(setCode))
-
+            bt_ga_maen.isEnabled = true
             var jeneng = "Paijo"
             var code = TV_code.text.toString()
             bt_ga_maen.setOnClickListener {
