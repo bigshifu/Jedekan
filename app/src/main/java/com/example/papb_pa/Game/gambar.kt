@@ -209,11 +209,9 @@ class gambar : Fragment() {
             view.draw_view.toggleEraser()
             view.image_draw_eraser.isSelected = view.draw_view.isEraserOn
             if (view.draw_view.isEraserOn)
-                view.image_draw_eraser.backgroundTintList =
-                    ColorStateList.valueOf(Color.parseColor("#FF6200EE"));
+                view.image_draw_eraser.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.purple_500)))
             else
-                view.image_draw_eraser.backgroundTintList =
-                    ColorStateList.valueOf(Color.parseColor("#000000"));
+                view.image_draw_eraser.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.black)))
             toggleDrawTools(view.draw_tools, false)
         }
         view.image_draw_eraser.setOnLongClickListener {
