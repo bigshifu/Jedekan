@@ -2,12 +2,15 @@ package com.example.papb_pa.Game
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -15,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -47,11 +51,12 @@ private const val ARG_PARAM2 = "param2"
  */
 class gambar : Fragment() {
     // TODO: Rename and change types of parameters
-    private var id : String? = null
-    private  var code : String? = null
-    var onDraw : Boolean = true
-    private lateinit var viewF : View
-    private val database = FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
+    private var id: String? = null
+    private var code: String? = null
+    var onDraw: Boolean = true
+    private lateinit var viewF: View
+    private val database =
+        FirebaseDatabase.getInstance("https://jedekan-gambar-default-rtdb.asia-southeast1.firebasedatabase.app/")
     private var sensorManager: SensorManager? = null
     private var acceleration = 0f
     private var currentAcceleration = 0f
@@ -69,10 +74,10 @@ class gambar : Fragment() {
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        onDraw = if (hidden){
+        onDraw = if (hidden) {
             viewF.draw_view.clearCanvas()
             false
-        }else{
+        } else {
             true
         }
     }
@@ -92,27 +97,29 @@ class gambar : Fragment() {
         setPaintAlpha(viewF)
         setPaintWidth(viewF)
         var ref = database.reference.child("room").child(code.toString())
-        var listener = object : ValueEventListener{
+        var listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                var numb : String = ""
-                var soal : String = ""
+                var numb: String = ""
+                var soal: String = ""
                 var round = ""
-                var timer : String = "0"
+                var timer: String = "0"
                 round = snapshot.child("round").value.toString()
-                var playerNumb = snapshot.child("user").child(id.toString()).child("numb").value.toString()
+                var playerNumb =
+                    snapshot.child("user").child(id.toString()).child("numb").value.toString()
                 numb = snapshot.child("numb").value.toString()
                 timer = snapshot.child("timer").value.toString()
-                if (numb != "null" && playerNumb !="null" && round != "null"){
+                if (numb != "null" && playerNumb != "null" && round != "null") {
                     var roundInt = Integer.parseInt(round)
                     var numbInt = Integer.parseInt(numb)
-                    soal = snapshot.child("soal").child(((roundInt*numbInt) - 1).toString()).value.toString()
-                    if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb){
+                    soal = snapshot.child("soal")
+                        .child(((roundInt * numbInt) - 1).toString()).value.toString()
+                    if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb) {
                         uploadGambar(convert(viewF.draw_view.getBitmap()), playerNumb)
                     }
                 }
                 if (soal != "null")
                     viewF.soal_gambar.text = soal
-                if(timer != "null")
+                if (timer != "null")
                     viewF.timer_gambar.progress = Integer.parseInt(timer)
 
             }
@@ -126,8 +133,10 @@ class gambar : Fragment() {
         ref.addValueEventListener(listener)
         getPesan(viewF)
         sensorManager = viewF.context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        Objects.requireNonNull(sensorManager)!!.registerListener(sensorListener, sensorManager!!
-            .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL)
+        Objects.requireNonNull(sensorManager)!!.registerListener(
+            sensorListener, sensorManager!!
+                .getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
+        )
         acceleration = 10f
         currentAcceleration = SensorManager.GRAVITY_EARTH
         lastAcceleration = SensorManager.GRAVITY_EARTH
@@ -147,13 +156,16 @@ class gambar : Fragment() {
                 viewF.draw_view.clearCanvas()
             }
         }
+
         override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
     }
-    private fun uploadGambar(string: String, numb : String) {
-        database.reference.child("room").child(code.toString()).child("gambar").child(numb).setValue(string)
+
+    private fun uploadGambar(string: String, numb: String) {
+        database.reference.child("room").child(code.toString()).child("gambar").child(numb)
+            .setValue(string)
     }
 
-    private fun getPesan(view: View){
+    private fun getPesan(view: View) {
         var pesan = arrayListOf<Pesan>()
         val pesanAdapter = PesanAdapter(pesan)
         val postListener = object : ValueEventListener {
@@ -170,10 +182,11 @@ class gambar : Fragment() {
                     )
                 }
                 pesanAdapter.notifyDataSetChanged()
-                if (pesan.size>0){
+                if (pesan.size > 0) {
                     view.rv_pesan_gambar.scrollToPosition(pesan.size - 1)
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 Toast.makeText(view.context, "Fail to Load Data", Toast.LENGTH_SHORT).show()
             }
@@ -186,11 +199,18 @@ class gambar : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun setUpDrawTools(view: View) {
         view.circle_view_opacity.setCircleRadius(100f)
         view.image_draw_eraser.setOnClickListener {
             view.draw_view.toggleEraser()
             view.image_draw_eraser.isSelected = view.draw_view.isEraserOn
+            if (view.draw_view.isEraserOn)
+                view.image_draw_eraser.backgroundTintList =
+                    ColorStateList.valueOf(Color.parseColor("#FF6200EE"));
+            else
+                view.image_draw_eraser.backgroundTintList =
+                    ColorStateList.valueOf(Color.parseColor("#000000"));
             toggleDrawTools(view.draw_tools, false)
         }
         view.image_draw_eraser.setOnLongClickListener {
@@ -344,16 +364,21 @@ class gambar : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
     }
+
     override fun onResume() {
-        sensorManager?.registerListener(sensorListener, sensorManager!!.getDefaultSensor(
-            Sensor .TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL
+        sensorManager?.registerListener(
+            sensorListener, sensorManager!!.getDefaultSensor(
+                Sensor.TYPE_ACCELEROMETER
+            ), SensorManager.SENSOR_DELAY_NORMAL
         )
         super.onResume()
     }
+
     override fun onPause() {
         sensorManager!!.unregisterListener(sensorListener)
         super.onPause()
     }
+
     private fun setPaintAlpha(view: View) {
         view.seekBar_opacity.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
