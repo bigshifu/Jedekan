@@ -106,6 +106,7 @@ class gambar : Fragment() {
                 var soal: String = ""
                 var round = ""
                 var timer: String = "0"
+                var jmlhPeserta = snapshot.child("user").childrenCount
                 round = snapshot.child("round").value.toString()
                 var playerNumb =
                     snapshot.child("user").child(id.toString()).child("numb").value.toString()
@@ -115,7 +116,7 @@ class gambar : Fragment() {
                     var roundInt = Integer.parseInt(round)
                     var numbInt = Integer.parseInt(numb)
                     soal = snapshot.child("soal")
-                        .child(((roundInt * numbInt) - 1).toString()).value.toString()
+                        .child((((roundInt - 1) * jmlhPeserta) + numbInt - 1).toString()).value.toString()
                     if (onDraw && viewF.draw_view.height > 0 && playerNumb == numb) {
                         uploadGambar(convert(viewF.draw_view.getBitmap()), playerNumb)
                     }
@@ -157,6 +158,7 @@ class gambar : Fragment() {
             acceleration = acceleration * 0.9f + delta
             if (acceleration > 12) {
                 viewF.draw_view.clearCanvas()
+                Toast.makeText(viewF.context, "HP WES DIGOYANG, GAMBARE ILANG", Toast.LENGTH_LONG).show()
             }
         }
 

@@ -116,12 +116,13 @@ class Jawab : Fragment() {
             var numb : String = ""
             var soal : String = ""
             var round = ""
+            var jmlhPeserta = it.child("user").childrenCount
             round = it.child("round").value.toString()
             numb = it.child("numb").value.toString()
             if (numb != "null" && round != "null"){
                 var roundInt = Integer.parseInt(round)
                 var numbInt = Integer.parseInt(numb)
-                soal = it.child("soal").child(((roundInt*numbInt) - 1).toString()).value.toString()
+                soal = it.child("soal").child((((roundInt - 1) * jmlhPeserta) + numbInt - 1).toString()).value.toString()
                 if (soal != "null"){
                     if (soal == pesan.toLowerCase()){
                         sendPesan("Jawabane $jeneng bener")
