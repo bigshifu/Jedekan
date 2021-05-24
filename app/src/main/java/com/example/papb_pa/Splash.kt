@@ -18,7 +18,7 @@ class Splash : AwesomeSplash() {
 
         //menambahkan background
         configSplash!!.backgroundColor = R.color.kuning
-        configSplash.animCircularRevealDuration = 3000
+        configSplash.animCircularRevealDuration = 2000
         configSplash.revealFlagX = Flags.REVEAL_LEFT
         configSplash.revealFlagX = Flags.REVEAL_BOTTOM
 
