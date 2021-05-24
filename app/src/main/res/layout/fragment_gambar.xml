@@ -35,7 +35,7 @@
                 android:text="mentok"
                 android:layout_margin="12dp"
                 android:textSize="16dp"
-                android:layout_gravity="right|top"/>
+                android:layout_gravity="left|top"/>
 
             <ImageButton
                 android:id="@+id/IB_FG_keluar"

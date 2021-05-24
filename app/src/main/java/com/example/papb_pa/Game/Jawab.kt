@@ -67,6 +67,8 @@ class Jawab : Fragment() {
         }
         view.IB_FJ_keluar.setOnClickListener {
             val i = Intent(activity, Logout::class.java)
+            i.putExtra("code", code)
+            i.putExtra("id", id)
             startActivity(i)
         }
         view.et_pesan.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
