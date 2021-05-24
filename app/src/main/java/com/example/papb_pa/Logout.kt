@@ -16,10 +16,9 @@ class Logout : AppCompatActivity() {
         var code = intent.getStringExtra("code").toString()
         var id = intent.getStringExtra("id").toString()
         btn_iyo.setOnClickListener {
-            database.reference.child("room").child(code).child("user").child(id).removeValue().addOnSuccessListener {
-                finishAffinity()
-                exitProcess(0)
-            }
+            database.reference.child("room").child(code).child("user").child(id).removeValue()
+            finishAffinity()
+            exitProcess(0)
         }
             btn_nggak.setOnClickListener {
                 finish()

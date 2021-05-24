@@ -2,10 +2,13 @@ package com.example.papb_pa.Game
 
 import android.app.Activity
 import android.app.Notification.EXTRA_NOTIFICATION_ID
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -109,7 +112,7 @@ class Maen : AppCompatActivity() {
                         intent.putExtra("code", code)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
-                        this@Maen.finish()
+                        finish()
                     }
                 }
                 if (playerNumb==roomNumb ){
@@ -156,6 +159,7 @@ class Maen : AppCompatActivity() {
             PendingIntent.getBroadcast(this, 1, joinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         val exitPendingIntent: PendingIntent =
             PendingIntent.getBroadcast(this, 2, exitIntent, 0)
+        createNotificationChannel()
         val builder = NotificationCompat.Builder(this, "running")
             .setSmallIcon(R.drawable.gambarmenu)
             .setContentTitle("Wara-wara")
@@ -176,7 +180,21 @@ class Maen : AppCompatActivity() {
 
     }
 
+    fun createNotificationChannel() {
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "running" // You should create a String resource for this instead of storing in a variable
+            val mChannel = NotificationChannel(
+                channelId,
+                "General Notifications",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            mChannel.description = "This is default channel used for all other notifications"
+
+            val notificationManager = this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+        }
+    }
 
     inner class runnable: Runnable {
 
