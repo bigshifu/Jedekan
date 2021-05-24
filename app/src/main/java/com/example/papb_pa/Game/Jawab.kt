@@ -1,18 +1,17 @@
 package com.example.papb_pa.Game
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.papb_pa.Logout
 import com.example.papb_pa.R
 import com.example.papb_pa.data.Pesan
 import com.example.papb_pa.data.User
@@ -22,6 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_gambar.view.*
+import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.fragment_jawab.view.*
 import java.lang.reflect.Field
 import java.text.SimpleDateFormat
@@ -70,6 +70,10 @@ class Jawab : Fragment() {
         view.bt_send.setOnClickListener {
             onSend(view)
         }
+        view.IB_FJ_keluar.setOnClickListener {
+            val i = Intent(activity, Logout::class.java)
+            startActivity(i)
+        }
         view.et_pesan.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN) {
                 //Perform Code
@@ -99,6 +103,8 @@ class Jawab : Fragment() {
         getPesan(view)
         return view
     }
+
+
 
     private fun onSend(view: View){
         var pesan = view.et_pesan.text.toString()
@@ -185,6 +191,7 @@ class Jawab : Fragment() {
                             userSnapshot.child("jeneng").getValue().toString()
                         )
                     )
+
                 }
                 heroAdapter.notifyDataSetChanged()
             }

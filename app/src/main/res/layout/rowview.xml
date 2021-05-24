@@ -21,6 +21,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginVertical="5dp"
             android:paddingTop="15dp"
             android:src="@drawable/profile"
             android:textAlignment="center"
@@ -32,10 +33,12 @@
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="10dp"
+            android:paddingTop="23dp"
             android:text="Jeneng Player"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="20sp"
+            android:autoSizeMinTextSize="4sp"
+            android:autoSizeMaxTextSize="8sp"
+            android:autoSizeStepGranularity="1sp"
             android:textStyle="bold" />
 
     </LinearLayout>
