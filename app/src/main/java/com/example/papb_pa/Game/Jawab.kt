@@ -213,7 +213,7 @@ class Jawab : Fragment() {
                 Toast.makeText(view.context, "Fail to Load Data", Toast.LENGTH_SHORT).show()
             }
         }
-        val ref = database.reference.child("room").child(code.toString()).child("user")
+        val ref = database.reference.child("room").child(code.toString()).child("user").orderByChild("poin")
         ref.addValueEventListener(postListener)
         view.RV_namaPemain.apply {
             layoutManager = LinearLayoutManager(view.context)
