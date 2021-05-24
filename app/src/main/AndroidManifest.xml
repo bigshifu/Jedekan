@@ -20,6 +20,7 @@
         <activity android:name=".waitingroom.WaitingRoom" />
         <activity android:name=".GaweAnyar" />
         <activity android:name=".MainActivity"/>
+        <activity android:name=".Logout"/>
         <activity android:name=".Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
