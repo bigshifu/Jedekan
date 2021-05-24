@@ -14,3 +14,4 @@
 ## Detail Cara Bermain
 
 ## Screenshot
+dada
