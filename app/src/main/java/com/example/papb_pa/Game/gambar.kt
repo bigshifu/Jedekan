@@ -85,6 +85,8 @@ class gambar : Fragment() {
         viewF = inflater.inflate(R.layout.fragment_gambar, container, false)
         viewF.IB_FG_keluar.setOnClickListener {
             val i = Intent(activity, Logout::class.java)
+            i.putExtra("code", code)
+            i.putExtra("id", id)
             startActivity(i)
         }
         setUpDrawTools(viewF)
