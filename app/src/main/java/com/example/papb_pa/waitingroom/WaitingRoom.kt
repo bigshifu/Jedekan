@@ -82,7 +82,7 @@ class WaitingRoom : AppCompatActivity() {
                         soal.shuffle()
                         ref.child("soal").get().addOnSuccessListener {
                             if (!it.exists()){
-                                ref.child("soal").setValue(soal.subList(0,user.size*3))
+                                ref.child("soal").setValue(soal.subList(0,user.size*2))
                             }
                         }
                     }
