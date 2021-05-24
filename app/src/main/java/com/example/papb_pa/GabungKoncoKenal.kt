@@ -27,7 +27,7 @@ class GabungKoncoKenal : AppCompatActivity() {
                     Toast.makeText(this, "Code tidak terdaftar!!", Toast.LENGTH_LONG).show()
                 }else{
                     var nwUser = User(id, jeneng)
-                    ref.child("user").setValue(nwUser).addOnSuccessListener {
+                    ref.child("user").child(id).setValue(nwUser).addOnSuccessListener {
                         var intent = Intent(this, WaitingRoom::class.java)
                         intent.putExtra("code", code)
                         intent.putExtra("jeneng", jeneng)
