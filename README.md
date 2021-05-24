@@ -3,11 +3,11 @@
 ## Final Project Pemrograman Aplikasi Perangkat Bergerak
 
 ## Anggota
-1.
-2.
-3.
-4.
-5.
+1. Muhammad Lamkhil Bashor
+2. Ryan Sutawijaya
+3. Abdurrahman Faiz
+4. Yualief Riswanda
+5. Ersya Nadia Candra
 
 ## Deskripsi
 
