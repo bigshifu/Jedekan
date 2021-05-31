@@ -24,3 +24,4 @@ Para pemain menebak gambar dari pemain yang sedang menggambar dengan waktu 35 de
 
 
 
+
