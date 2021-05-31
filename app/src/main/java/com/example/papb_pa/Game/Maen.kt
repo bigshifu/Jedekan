@@ -234,7 +234,7 @@ class Maen : AppCompatActivity() {
                     val now = Date()
                     val strDate: String = sdfDate.format(now)
                     ref.child("update").setValue(strDate)
-                    if (time>=60){
+                    if (time>=35){
                         time=0
                         ref.get().addOnSuccessListener {
                             var numb = it.child("numb").value.toString()
