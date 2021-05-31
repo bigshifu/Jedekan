@@ -1,7 +1,6 @@
 package com.example.papb_pa.Game
 
 import android.app.Activity
-import android.app.Notification.EXTRA_NOTIFICATION_ID
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,15 +8,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.PersistableBundle
-import android.provider.Settings
-import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.IntentCompat
 import androidx.fragment.app.Fragment
 import com.example.papb_pa.*
 import com.example.papb_pa.R
@@ -26,8 +23,8 @@ import kotlinx.android.synthetic.main.activity_maen_game.*
 import kotlinx.android.synthetic.main.fragment_jawab.*
 import kotlinx.android.synthetic.main.view_gambar.*
 import java.text.SimpleDateFormat
-import java.time.Instant.now
 import java.util.*
+
 
 class Maen : AppCompatActivity() {
     companion object{
@@ -147,7 +144,14 @@ class Maen : AppCompatActivity() {
 
     override fun onBackPressed() {
         if(backPressedTime + 2000 > System.currentTimeMillis()){
-            super.onBackPressed()
+            val intents = Intent(this, MainActivity::class.java)
+            intents.addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK
+                or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            )
+            startActivity(intents)
+            finish()
             return
         }else{
             val joinIntent = Intent(this, Notif::class.java).apply {
