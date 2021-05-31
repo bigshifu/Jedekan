@@ -10,6 +10,7 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -35,6 +36,7 @@ class Maen : AppCompatActivity() {
     private var jeneng = ""
     private var id = ""
     private var backPressedTime:Long =0
+    lateinit var backtoast: Toast
     private var bgThread = Thread()
     private lateinit var fragGambar : Fragment
     private lateinit var fragJawab: Fragment
@@ -145,6 +147,7 @@ class Maen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        backtoast = Toast.makeText(this, "Tombolen maneh gawe metu aplikasi", Toast.LENGTH_SHORT)
         if(backPressedTime + 2000 > System.currentTimeMillis()){
             val intents = Intent(this, MainActivity::class.java)
             intents.addFlags(
@@ -153,9 +156,6 @@ class Maen : AppCompatActivity() {
                 or Intent.FLAG_ACTIVITY_CLEAR_TASK
             )
             startActivity(intents)
-            finish()
-            return
-        }else{
             val joinIntent = Intent(this, Notif::class.java).apply {
                 this.putExtra("action", "join")
                 this.putExtra("code", code)
@@ -164,6 +164,8 @@ class Maen : AppCompatActivity() {
             }
             val exitIntent = Intent(this, Notif::class.java).apply {
                 this.putExtra("action", "exit")
+                this.putExtra("id", id)
+                this.putExtra("code", code)
             }
             val joinPendingIntent: PendingIntent =
                 PendingIntent.getBroadcast(this, 1, joinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -186,8 +188,11 @@ class Maen : AppCompatActivity() {
                 // notificationId is a unique int for each notification that you must define
 
                 notify(1, builder.build())
-
             }
+            finish()
+            return
+        }else{
+            backtoast.show()
         }
         backPressedTime = System.currentTimeMillis()
 
