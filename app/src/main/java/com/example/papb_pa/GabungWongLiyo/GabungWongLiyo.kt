@@ -23,7 +23,6 @@ class GabungWongLiyo  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gabung_wong_liyo)
 
-
         var room = arrayListOf<getRoom>()
         val roomAdapter = RoomAdapter(room)
         val postListener = object : ValueEventListener {

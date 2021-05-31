@@ -207,6 +207,7 @@ class Jawab : Fragment() {
                     )
 
                 }
+                user.reverse()
                 heroAdapter.notifyDataSetChanged()
             }
             override fun onCancelled(databaseError: DatabaseError) {

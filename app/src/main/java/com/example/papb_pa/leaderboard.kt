@@ -1,11 +1,15 @@
 package com.example.papb_pa
 
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papb_pa.GabungWongLiyo.RoomAdapter
 import com.example.papb_pa.data.User
@@ -47,5 +51,14 @@ class leaderboard : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@leaderboard)
             adapter = userAdapter
         }
+    }
+
+    override fun onBackPressed() {
+        val intents = Intent(this, MainActivity::class.java)
+        intents.addFlags(
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intents)
+            finish()
+            return
     }
 }
