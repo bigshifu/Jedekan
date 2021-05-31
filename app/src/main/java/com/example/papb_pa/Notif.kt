@@ -24,10 +24,11 @@ class Notif : BroadcastReceiver() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             p0?.startActivity(intent)
         } else if (action == "exit") {
-            p0?.let { NotificationManagerCompat.from(it).cancel(1) }
-            p1?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            Maen.maen.finish()
-            database.reference.child("room").child(code).child("user").child(id).removeValue()
+            database.reference.child("room").child(code).child("user").child(id).removeValue().addOnSuccessListener { snapshot ->
+                p0?.let { NotificationManagerCompat.from(it).cancel(1) }
+                p1?.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                Maen.maen.finish()
+            }
         }
     }
 }

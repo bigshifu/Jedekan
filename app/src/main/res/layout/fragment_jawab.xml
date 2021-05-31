@@ -45,7 +45,7 @@
                 android:layout_gravity="bottom"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:indeterminate="false"
-                android:max="60"
+                android:max="35"
                 android:progress="1"/>
         </FrameLayout>
 
