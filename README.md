@@ -21,6 +21,7 @@ Para pemain menebak gambar dari pemain yang sedang menggambar dengan waktu 35 de
 ## Screenshot
 
 ## Video Demo
+https://user-images.githubusercontent.com/61936315/120218158-87c02700-c263-11eb-82d0-cc001be03a4d.mp4
 
 
 
