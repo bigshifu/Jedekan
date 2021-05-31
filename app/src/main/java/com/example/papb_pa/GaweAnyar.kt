@@ -3,11 +3,9 @@ package com.example.papb_pa
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.provider.Settings
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import com.example.papb_pa.data.User
 import com.example.papb_pa.data.storeRoom
 import com.example.papb_pa.waitingroom.WaitingRoom
@@ -60,4 +58,6 @@ class GaweAnyar : AppCompatActivity() {
                 i -> kotlin.random.Random.nextInt(0, charPool.size)
         }.map(charPool::get).joinToString("")
     }
+
+
 }

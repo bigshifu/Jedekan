@@ -1,7 +1,6 @@
 package com.example.papb_pa
 
 import android.content.Intent
-import android.provider.SyncStateContract
 import android.view.WindowManager
 import androidx.appcompat.app.ActionBar
 import com.daimajia.androidanimations.library.Techniques

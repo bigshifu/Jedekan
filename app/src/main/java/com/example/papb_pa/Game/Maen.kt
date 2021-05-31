@@ -37,6 +37,7 @@ class Maen : AppCompatActivity() {
     private var code = ""
     private var jeneng = ""
     private var id = ""
+    private var backPressedTime:Long =0
     private var bgThread = Thread()
     private lateinit var fragGambar : Fragment
     private lateinit var fragJawab: Fragment
@@ -145,38 +146,44 @@ class Maen : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        val joinIntent = Intent(this, Notif::class.java).apply {
-            this.putExtra("action", "join")
-            this.putExtra("code", code)
-            this.putExtra("jeneng", jeneng)
-            this.putExtra("id", id)
+        if(backPressedTime + 2000 > System.currentTimeMillis()){
+            super.onBackPressed()
+            return
+        }else{
+            val joinIntent = Intent(this, Notif::class.java).apply {
+                this.putExtra("action", "join")
+                this.putExtra("code", code)
+                this.putExtra("jeneng", jeneng)
+                this.putExtra("id", id)
+            }
+            val exitIntent = Intent(this, Notif::class.java).apply {
+                this.putExtra("action", "exit")
+            }
+            val joinPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 1, joinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val exitPendingIntent: PendingIntent =
+                PendingIntent.getBroadcast(this, 2, exitIntent, 0)
+            createNotificationChannel()
+            val builder = NotificationCompat.Builder(this, "running")
+                .setSmallIcon(R.drawable.gambarmenu)
+                .setContentTitle("Wara-wara")
+                .setContentText("Gamemu sek mlaku")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .addAction(R.drawable.keluar, "Join", joinPendingIntent)
+                .addAction(R.drawable.keluar, "Exit", exitPendingIntent)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0))
+                .setAutoCancel(true)
+
+            with(NotificationManagerCompat.from(this)) {
+
+                // notificationId is a unique int for each notification that you must define
+
+                notify(1, builder.build())
+
+            }
         }
-        val exitIntent = Intent(this, Notif::class.java).apply {
-            this.putExtra("action", "exit")
-        }
-        val joinPendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 1, joinIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        val exitPendingIntent: PendingIntent =
-            PendingIntent.getBroadcast(this, 2, exitIntent, 0)
-        createNotificationChannel()
-        val builder = NotificationCompat.Builder(this, "running")
-            .setSmallIcon(R.drawable.gambarmenu)
-            .setContentTitle("Wara-wara")
-            .setContentText("Gamemu sek mlaku")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .addAction(R.drawable.keluar, "Join", joinPendingIntent)
-            .addAction(R.drawable.keluar, "Exit", exitPendingIntent)
-            .setContentIntent(PendingIntent.getActivity(this, 0, Intent(), 0))
-            .setAutoCancel(true)
-
-        with(NotificationManagerCompat.from(this)) {
-
-            // notificationId is a unique int for each notification that you must define
-
-            notify(1, builder.build())
-
-        }
+        backPressedTime = System.currentTimeMillis()
 
     }
 
