@@ -105,11 +105,13 @@ class Maen : AppCompatActivity() {
                     }
                 }
                 if (maen == "false"){
-                    if (this@Maen.isDestroyed){
+                    if (!this@Maen.isDestroyed){
                         var intent = Intent(this@Maen, leaderboard::class.java)
                         intent.putExtra("code", code)
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
+                        supportFragmentManager.beginTransaction().remove(fragJawab).commit()
+                        supportFragmentManager.beginTransaction().remove(fragGambar).commit()
                         finish()
                     }
                 }
