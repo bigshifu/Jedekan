@@ -10,9 +10,10 @@
 6. Yualief Riswanda         185150207111008
 
 ## Deskripsi
-Jedekan Gambar merupakan sebuah game tebak gambar yang mengharuskan pemain untuk saling menggambar dan menebak gambar dari pemain lain
+Jedekan Gambar merupakan sebuah game menggambar dan menebak gambar.
 
 ## Detail Cara Bermain
+Para pemain menebak gambar dari pemain yang sedang menggambar dengan waktu 35 detik dan setiap 35 detik pemain yang menggambar akan berganti, sampai 2x putaran(ronde). Setiap jawaban benar mendapatkan 10 poin. Pemain dengan poin terbanyak akan menempati urutan no.1 di Leaderboard.
 
 ## Screenshot
 
