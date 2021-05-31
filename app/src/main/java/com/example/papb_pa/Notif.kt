@@ -20,6 +20,7 @@ class Notif : BroadcastReceiver() {
             p0?.let { NotificationManagerCompat.from(it).cancel(1) }
             var intent = Intent(p0, Maen::class.java)
             intent.putExtra("code", code)
+            intent.putExtra("jeneng", jeneng)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             p0?.startActivity(intent)
         } else if (action == "exit") {
